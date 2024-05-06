@@ -1,5 +1,5 @@
+// news_data.ts
 import { defineStore } from 'pinia'
-import { clean_data } from './Data Cleaning';
 import axios from 'axios';
 
 export const useNewsStore = defineStore('News', {
@@ -19,7 +19,7 @@ export const useNewsStore = defineStore('News', {
             try {
                 const response = await axios.get(url);
                 const { data: { articles = [] } = {} } = response;
-                const main_data = clean_data(articles);
+                const main_data = this.clean_data(articles);
                 this.news = main_data;
                 this.isLoading = true
                 return main_data;
@@ -29,14 +29,14 @@ export const useNewsStore = defineStore('News', {
             }
 
         },
-        clean_data(data: Article[]): Article[] {
-            const new_data: Article[] = [];
+        clean_data(data: any[]): any[] {
+            const new_data: any[] = [];
             
             for (const item of data) {
-                if (item.title == '[Removed]' || item.content == '[Removed]' || item.content == null ) {
+                if (item.title === '[Removed]' || item.content === '[Removed]' || item.content === null) {
                     continue;
                 }
-                if (item.urlToImage == null) {
+                if (item.urlToImage === null || item.urlToImage === '[Removed]') {
                     item.urlToImage = 'https://wallpapers.com/images/featured/airport-w6v47yjhxcohsjgf.jpg';
                 }
                 item.id = new_data.length;

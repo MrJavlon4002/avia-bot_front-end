@@ -13,7 +13,7 @@ export default defineComponent({
     }
   },
   methods: {
-    onChange(e) {
+    onChange(e: any) {
       const file = e.target.files[0]
       this.new_item.image = file
       this.imageUrl = URL.createObjectURL(file)
