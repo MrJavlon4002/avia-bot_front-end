@@ -1,39 +1,45 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
+import RichTextComponent from '@/components/RichTextComponent.vue';
 export default defineComponent({
+  components: {
+    RichTextComponent,
+  },
   data() {
     return {
       imageUrl: '',
       new_item: {
         title: '',
         text: '',
-        image: null,
+        image: '',
         time: '',
       },
     }
   },
   methods: {
-    onChange(e: any) {
+    submitForm() {
+      this.getTime();
+      console.log(this.new_item);
+      
+    },
+    getImage(e: any) {
       const file = e.target.files[0]
       this.new_item.image = file
       this.imageUrl = URL.createObjectURL(file)
-      this.getTime()
     },
     getTime() {
       const date = new Date();
       let day = date.getDate();
       let month = date.getMonth() + 1;
       let year = date.getFullYear();
-      this.new_item.time = (`${day}-${month}-${year}`);
-      console.log(this.new_item.time);
-      
+      this.new_item.time = `${year}-${month}-${day}T11`;
     }
   },
 })
 </script>
 
 <template>
-  <form action="">
+  <form action="" onsubmit="return false">
     <div class=" flex flex-col gap-10 py-[100px] px-[10%]">
 
       <!-- Title -->
@@ -49,10 +55,9 @@ export default defineComponent({
 
       <!-- Text -->
       <div class="col-span-full">
-        <label for="text" class="block text-sm font-medium leading-6 text-gray-900">Yangilik matnini kiriting</label>
+        <label for="text" class="block text-sm font-medium leading-6">Yangilik matnini kiriting</label>
         <div class="mt-2">
-          <textarea id="text" required v-model="new_item.text" name="about" rows="20"
-            class="p-[10px] block w-full rounded-md border-0 outline-none py-1.5 shadow-sm ring-1 ring-inset ring-darkGreen focus:ring-2 focus:ring-inset focus:ring-darkGreen sm:text-sm sm:leading-6"></textarea>
+          <RichTextComponent class=" block w-full rounded-md border-0 outline-none shadow-sm ring-1 ring-inset ring-darkGreen focus:ring-2 focus:ring-inset focus:ring-darkGreen sm:text-sm sm:leading-6" v-model="new_item.text"></RichTextComponent>
         </div>
       </div>
 
@@ -71,7 +76,7 @@ export default defineComponent({
               <label for="image-upload"
                 class="relative text-mainGreen cursor-pointer rounded-md bg-white font-semibold focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-darkGreen">
                 <span class=" text-mainGreen">Upload a file</span>
-                <input id="image-upload" accept="image/jpeg" @change=onChange name="image" type="file" class="sr-only">
+                <input id="image-upload" accept="image/jpeg" @change=getImage name="image" type="file" class="sr-only">
               </label>
               <p class="pl-1">or drag and drop</p>
             </div>
@@ -84,7 +89,7 @@ export default defineComponent({
 
       <div class="mt-6 flex items-center justify-end gap-x-6">
         <button type="button" class="text-lg font-semibold leading-6 text-gray-900">Cancel</button>
-        <button type="submit"
+        <button type="submit" @click="submitForm"
           class="rounded-md bg-mainGreen px-5 py-2 text-lg font-semibold text-white shadow-sm hover:bg-mainGreen focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mainGreen">Save</button>
       </div>
     </div>

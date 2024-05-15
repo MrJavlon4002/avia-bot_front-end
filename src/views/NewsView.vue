@@ -67,7 +67,7 @@ export default defineComponent({
 
     <div v-if="!search" class="NEWS relative flex flex-col md:grid md:w-full md:grid-cols-3 gap-5">
       <RouterLink :to="`/News/${item.id}`" :key="item" v-for="item of main_news_data" class="cursor-pointer h-[130px]"
-        :style="{ backgroundImage: `url(${item.urlToImage})` }">
+        :style="{ backgroundImage: `url(${item.image})` }">
         <div
           class=" text-white px-[5%] transition-[.3s] text-xl absolute pt-[100px] opacity-1 left-0 w-full bottom-[-500%] bg-gradient-to-t from-black to-transparent flex items-end pb-5">
           <h1 class="">{{ item.title }}</h1>
@@ -77,7 +77,7 @@ export default defineComponent({
     </div>
 
     <div v-if="search" class="w-full min-h-10 flex flex-col gap-5">
-      <div v-for="item in searched_data" :key="item.id"
+      <RouterLink :to="`/News/${item.id}`" v-for="item in searched_data" :key="item.id"
         class="flex flex-col gap-5 sm:flex-row justify-between px-10 py-5 bg-mainGreen shadow-xl hover:shadow-md transition-[.3s] sm:items-center rounded text-white">
         <div class="flex flex-col gap-2">
           <p class="text-lg">{{ item.title }}</p>
@@ -88,7 +88,7 @@ export default defineComponent({
             O'chirish
           </button>
         </div>
-      </div>
+      </RouterLink>
     </div>
 
   </div>

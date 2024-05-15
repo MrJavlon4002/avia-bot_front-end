@@ -11,15 +11,12 @@ export const useNewsStore = defineStore('News', {
     },
     actions: {
         async taking_data() {
-            const apiKey = '8047043b8e14426cbc79b19e83adb2f1'
-            const url = 'https://newsapi.org/v2/top-headlines?' +
-            'country=us&' +
-            'apiKey='+apiKey;
-
+            const url = 'http://51.20.34.222:8000/';
             try {
                 const response = await axios.get(url);
-                const { data: { articles = [] } = {} } = response;
-                const main_data = this.clean_data(articles);
+                
+                const main_data = response.data;
+                this.filterImage(main_data);
                 this.news = main_data;
                 this.isLoading = true
                 return main_data;
@@ -29,21 +26,13 @@ export const useNewsStore = defineStore('News', {
             }
 
         },
-        clean_data(data: any[]): any[] {
-            const new_data: any[] = [];
-            
-            for (const item of data) {
-                if (item.title === '[Removed]' || item.content === '[Removed]' || item.content === null) {
-                    continue;
-                }
-                if (item.urlToImage === null || item.urlToImage === '[Removed]') {
-                    item.urlToImage = 'https://wallpapers.com/images/featured/airport-w6v47yjhxcohsjgf.jpg';
-                }
-                item.id = new_data.length;
-                new_data.push(item);
+        filterImage(data : any[]) {
+            for (let item of data) {
+                // if(item.image == ''){
+                    item.image = 'https://www.airport-technology.com/wp-content/uploads/sites/14/2022/01/shutterstock_758602234-min-scaled-e1641297696653.jpg'
+                // }
             }
-            return new_data;
-        }
+        },
         
     },
 })
