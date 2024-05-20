@@ -1,6 +1,8 @@
 <script lang="ts">
-import { useNewsStore } from '@/stores/news_data'
-import { defineComponent } from 'vue'
+import { useNewsStore } from '@/stores/news_data';
+import { defineComponent } from 'vue';
+import { useRoute } from 'vue-router';
+
 export default defineComponent({
   data() {
     return {
@@ -12,16 +14,27 @@ export default defineComponent({
       },
     };
   },
-  async created() {
+  setup() {
+    const route = useRoute();
+    const newsStore = useNewsStore();
+
+    return { route, newsStore };
+  },
+  async mounted() {
     try {
-      const data = await useNewsStore().taking_data() as any[];
-      const itemID = Number(this.$route.params.id)
-      this.item_data = {
-        image: data[itemID-1].image,
-        title: data[itemID-1].title,
-        publishedAt: this.formattedDate(data[itemID-1].created_at) ,
-        text: data[itemID-1].text || '',
-      };
+      if (!this.newsStore.news.length) {
+        await this.newsStore.fetchData();
+      }
+      const itemID = Number(this.route.params.id);
+      const newsItem = this.newsStore.news.find(item => item.id === itemID);
+      if (newsItem) {
+        this.item_data = {
+          image: newsItem.image,
+          title: newsItem.title,
+          publishedAt: this.formattedDate(newsItem.created_at),
+          text: newsItem.text || '',
+        };
+      }
     } catch (error) {
       console.error("Failed to load data:", error);
     }
@@ -29,11 +42,10 @@ export default defineComponent({
   methods: {
     formattedDate(created_at: string) {
       const date_array = created_at.split('-');
-      
-      return `${date_array[2].split('T')[0]}. ${date_array[1]}. ${date_array[0]}`
-    }
-  }
-})
+      return `${date_array[2].split('T')[0]}. ${date_array[1]}. ${date_array[0]}`;
+    },
+  },
+});
 </script>
 
 <template>
@@ -50,10 +62,12 @@ export default defineComponent({
       <p v-html="item_data.text">
       </p>
     </div>
+     <div class="flex justify-center">
+      <button type="button"
+        class="w-[200px] items-center rounded-md bg-red px-3 py-2 text-lg font-semibold text-white shadow-sm hover:bg-lightRed  transition-[.5s] flex justify-center">
+        O'chirish
+      </button>
+     </div>
   </div>
+
 </template>
-
-
-<style lang="scss">
-  
-</style>

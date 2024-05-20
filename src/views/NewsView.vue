@@ -1,43 +1,46 @@
 <script lang="ts">
-import { useNewsStore } from '@/stores/news_data'
-import { defineComponent } from 'vue'
+import { useNewsStore } from '@/stores/news_data';
+import { defineComponent, onMounted } from 'vue';
 
 export default defineComponent({
   data() {
     return {
-      news_data: [] as any,
-      main_news_data: [] as any[],
       search: '',
       searched_data: [] as any[],
     };
   },
-  async created() {
-    try {
-      const data = await useNewsStore().taking_data() as any[];
-      this.news_data = data;
-      this.main_news_data = data.slice(0, 6);
-    } catch (error) {
-      console.error("Failed to load data:", error);
-    }
+  computed: {
+    news_data() {
+      return useNewsStore().news;
+    },
+    main_news_data() {
+      return this.news_data.slice(0, 6);
+    },
   },
   watch: {
-    search: 'Searching'
+    search: 'Searching',
   },
   methods: {
     async Searching() {
-
-      if (this.search == '') {
+      if (this.search === '') {
         this.searched_data = [];
         return;
       }
 
       const searchTerm = this.search.trim().toLowerCase();
-      this.searched_data = this.news_data.filter((item: { title: string; }) => {
+      this.searched_data = this.news_data.filter((item: { title: string }) => {
         return item.title.toLowerCase().includes(searchTerm);
       });
-    }
+    },
+    async fetchNewsData() {
+      const newsStore = useNewsStore();
+      await newsStore.fetchData();
+    },
   },
-})
+  mounted() {
+    this.fetchNewsData();
+  },
+});
 </script>
 
 
@@ -46,6 +49,7 @@ export default defineComponent({
   <div v-if="!news_data.length" class="w-full h-[100vh] overflow-hidden flex justify-center items-center">
     <img class="w-[50%] md:w-[30%] animate-pulse" src="../assets/images/Main Logo.jpg" alt="">
   </div>
+  
   <div v-else class="pt-[120px]  px-[10%] h-auto lg:h-[100vh] flex flex-col gap-10">
     <div>
       <form class=" lg:w-[60%] w-full mx-auto ">
