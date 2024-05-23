@@ -26,9 +26,9 @@ export const useNewsStore = defineStore('News', {
         },
         filterImage(data: any[]) {
             for (let item of data) {
-                // if (!item.image || item.image.trim() === '') {
+                if (!item.image || item.image.trim() === '') {
                     item.image = 'https://www.airport-technology.com/wp-content/uploads/sites/14/2022/01/shutterstock_758602234-min-scaled-e1641297696653.jpg';
-                // }
+                }
             }
         },
     },
