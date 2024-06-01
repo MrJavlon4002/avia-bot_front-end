@@ -15,7 +15,7 @@ export const useNewsStore = defineStore('News', {
             try {
                 const response = await axios.get(url);
                 const main_data = response.data;
-                this.filterImage(main_data);
+                // this.filterImage(main_data);
                 this.news = main_data;
             } catch (error) {
                 console.error("Failed to fetch data:", error);

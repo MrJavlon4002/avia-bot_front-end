@@ -5,7 +5,7 @@ import { RouterLink } from 'vue-router'
 export default defineComponent({
   data() {
     return {
-      role: "admin",
+      role: "",
       openNav: true,
     }
   },
@@ -29,7 +29,7 @@ export default defineComponent({
 
       <RouterLink @click="closeNav" to="/chatbot" class="hover:text-darkGreen transition-[.3s]">Chat Bot</RouterLink>
       
-      <RouterLink @click="closeNav" v-if="!role" to="/login" class="flex gap-2.5 items-center hover:text-darkGreen transition-[.3s]">Login <i class="fa-solid fa-arrow-right-to-bracket text-2xl"></i></RouterLink>
+      <RouterLink @click="closeNav" v-if="role" to="/login" class="flex gap-2.5 items-center hover:text-darkGreen transition-[.3s]">Login <i class="fa-solid fa-arrow-right-to-bracket text-2xl"></i></RouterLink>
       
       <RouterLink @click="closeNav" v-if="role == 'admin' || role == 'superadmin'" to="/admin" class="flex gap-2.5 items-center hover:text-darkGreen transition-[.3s]">Yangilik yozish <i class="fa-solid fa-file-lines text-2xl"></i></RouterLink>
       

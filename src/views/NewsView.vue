@@ -14,7 +14,7 @@ export default defineComponent({
       return useNewsStore().news;
     },
     main_news_data() {
-      return this.news_data.slice(0, 6);
+      return this.news_data;
     },
   },
   watch: {
